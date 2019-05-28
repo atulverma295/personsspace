@@ -12,6 +12,7 @@
 	border-color: #ccc;
 }
 
+
 .tg td {
 	font-family: Arial, sans-serif;
 	font-size: 14px;

@@ -25,6 +25,7 @@ table, th, td {
 		</form:form>
 	</div>
   <div style="float:left">
+  <br>
   <form:form method="GET" action="">
 	  <input type="radio" value=>SearchByName<br>
 	  <input type="radio" value=>SearchById<br>
