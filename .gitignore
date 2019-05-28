@@ -348,5 +348,16 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
 # End of https://www.gitignore.io/api/linux,macos,windows,eclipse,intellij,intellij+iml,intellij+all
 
