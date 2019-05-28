@@ -1,0 +1,3 @@
+com\freedom\persons\dao\PersonDAO.class
+com\freedom\persons\dao\PersonDAOImpl.class
+com\freedom\persons\dao\Person.class
