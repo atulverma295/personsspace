@@ -87,7 +87,7 @@ public class PersonDAOImpl implements PersonDAO {
 	
 	public List<Person> getPersonByName(String name) {
 		Session session = this.sessionFactory.getCurrentSession();
-		Query query=session.createQuery("from Person p where p.name LIKE '"+ name+ "%'");
+		Query query=session.createQuery("from Person p where p.firstName LIKE '"+ name+ "%'");
 		List<Person> list=(List<Person>) query.list();
 		if(list.size()>0)
 		{
@@ -99,8 +99,7 @@ public class PersonDAOImpl implements PersonDAO {
 	}
 	public Person getByName(String name) {
 		Session session = this.sessionFactory.getCurrentSession();
-		Query query=session.createQuery("from Person p where p.name=:name");
-		query.setString("name", name);
+		Query query=session.createQuery("from Person p where p.firstName='name'");
 		List<Person> list=(List<Person>) query.list();
 		if(list.size()>0)
 		{
@@ -129,6 +128,26 @@ public class PersonDAOImpl implements PersonDAO {
 		Query query = session.createQuery("from Person p where p.id!=:id");
 		query.setInteger("id", id);
 		
+		List<Person> personsList = (List<Person>) query.list();
+		for (Person p : personsList) {
+			logger.info("Person List::" + p);
+		}
+		return personsList;
+	}
+	public  List<Person> listofPersons(int id) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from Person p where p.id=:id");
+		query.setInteger("id", id);
+		List<Person> personsList = (List<Person>) query.list();
+		for (Person p : personsList) {
+			logger.info("Person List::" + p);
+		}
+		return personsList;
+	}
+	public  List<Person> listofPersons(long contact) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from Person p where p.contact=:contact");
+		query.setLong("contact", contact);
 		List<Person> personsList = (List<Person>) query.list();
 		for (Person p : personsList) {
 			logger.info("Person List::" + p);

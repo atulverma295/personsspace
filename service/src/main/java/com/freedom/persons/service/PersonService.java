@@ -1,5 +1,4 @@
 package com.freedom.persons.service;
-
 import java.util.List;
 
 import com.freedom.persons.commons.PersonDTO;
@@ -16,5 +15,7 @@ public interface PersonService {
 	public PersonDTO updatePersons(PersonDTO p);
 	public PersonDTO addPerson(PersonDTO p);
 	public List<PersonDTO> listPersonsWithoutAdmin(int id);
+	public List<PersonDTO> listofPersons(int id);
+	public List<PersonDTO> listofPersons(long contact);
 }
 

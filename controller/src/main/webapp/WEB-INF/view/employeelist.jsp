@@ -26,46 +26,19 @@ table,th,td {
 				<th>Lasst_Name</th>
 				<th>Contact</th>
 			</tr>
-			<c:forEach items="${personDTOlist}" var="persons">
+			<c:forEach items="${personDTOlist}" var="personDTO">
 				<tr>
-					<td>${persons.id}</td>
-					<td>${persons.first_name}</td>
-					<td>${persons.country}</td>
-					<td>${persons.username}</td>
-					<td>${persons.password}</td>
-					<td>${persons.admin}</td>
-					<td>${persons.last_name}</td>
-					<td>${persons.contact}</td>
+					<td>${personDTO.id}</td>
+					<td>${personDTO.firstName}</td>
+					<td>${personDTO.country}</td>
+					<td>${personDTO.username}</td>
+					<td>${personDTO.password}</td>
+					<td>${personDTO.admin}</td>
+					<td>${personDTO.lastName}</td>
+					<td>${personDTO.contact}</td>
 				</tr>
 			</c:forEach>
 		</table>
 	</c:if>
-	<c:if test="${!empty listPersonDTO}">
-	<table class="tg">
-	<tr>
-		<th width="80">ID</th>
-		<th width="120">First_Name</th>
-		<th width="120">Country</th>
-		<th width="120">UserName</th>
-		<th width="120">PassWord</th>
-		<th width="120">ADMIN</th>
-		<th width="120">Last_Name</th>
-		<th width="120">Contact</th>
-		
-	</tr>
-	<c:forEach items="${listPersonDTO}" var="person">
-		<tr>
-			<td>${person.id}</td>
-			<td>${person.first_name}</td>
-			<td>${person.country}</td>
-			<td>${person.username}</td>
-			<td>${person.password}</td>
-			<td>${person.admin}</td>
-			<td>${person.last_name}</td>
-			<td>${person.contact}</td>
-		</tr>
-	</c:forEach>
-	</table>
-</c:if>
 </body>
 </html>

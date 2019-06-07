@@ -91,7 +91,7 @@
 				<td><form:label path="admin">
 						<spring:message text="Admin" />
 					</form:label></td>
-					
+
 				<td><select name="admin">
 						<option value="yes">Yes</option>
 						<option value="no" selected>No</option>

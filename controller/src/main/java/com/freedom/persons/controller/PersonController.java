@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.freedom.persons.commons.LoginDTO;
 import com.freedom.persons.commons.PersonDTO;
+import com.freedom.persons.commons.SearchDTO;
 import com.freedom.persons.commons.validators.PersonRequestValidator;
 import com.freedom.persons.dao.Person;
 import com.freedom.persons.service.PersonService;
@@ -35,13 +36,13 @@ public class PersonController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(@ModelAttribute("loginDTO") LoginDTO loginDTO, BindingResult result, ModelMap model) {
-
+		String forward = "";
 		String name = loginDTO.getUsername();
 		String password = loginDTO.getPassword();
 		if (PersonRequestValidator.isValidateName(name) && PersonRequestValidator.isValidateName(password))
 			model.addAttribute("username", name);
 		model.addAttribute("password", password);
-		String forward = "login";
+		forward = "login";
 		return forward;
 	}
 
@@ -68,9 +69,8 @@ public class PersonController {
 		return forwardPage;
 	}
 
-	@RequestMapping(value = "/searchById", method = RequestMethod.GET)
-	public String displayUser(ModelMap model, @RequestParam("id") Integer id,
-			@RequestParam("firstName") String firstName) {
+	@RequestMapping(value = "/searchByIdandName", method = RequestMethod.GET)
+	public String displayUser(ModelMap model, @RequestParam("id") int id, @RequestParam("firstName") String firstName) {
 		String forwardPage = "";
 		PersonDTO personDTO = this.personService.getPersonByIdAndName(id, firstName);
 		if (personDTO != null) {
@@ -102,38 +102,60 @@ public class PersonController {
 	}
 
 	@RequestMapping(value = "/searchByName", method = RequestMethod.GET)
-	public String displayListbyname(ModelMap model, @RequestParam("firstName") String name) {
+	public String displayListbyname(ModelMap model, @RequestParam("firstName") String firstName,
+			@RequestParam("adminid") int adminid) {
 		String forwardPage = "";
-		List<PersonDTO> personDTOlist = this.personService.getPersonByName(name);
-		List<PersonDTO> personDTOList = this.personService.listPersons();
-
-		if (personDTOlist != null) {
-			System.out.println("User is present.");
-			System.out.println(personDTOlist);
-			System.out.println(personDTOList);
-
-			forwardPage = "employeelist";
-			model.addAttribute("personDTOlist", personDTOlist);
-			model.addAttribute("listPersonDTO", personDTOList);
-
+		List<PersonDTO> personDTONameList = this.personService.getPersonByName(firstName);
+		if (personDTONameList != null) {
+			if (PersonRequestValidator.isValidateName(firstName)) {
+				model.addAttribute("personDTOlist", personDTONameList);
+				forwardPage = "employeelist";
+			} else {
+				forwardPage = "employee";
+			}
 		} else {
-			System.out.println("User is not present.");
+			model.addAttribute("error", "value is wrong please try again");
+			model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+			List<PersonDTO> listpersonDTO = this.personService.listPersonsWithoutAdmin(adminid);
+			model.addAttribute("listPersonDTO", listpersonDTO);
+			forwardPage = "adminEmployee2";
+
 		}
 		return forwardPage;
 	}
-	
+
 	@RequestMapping(value = "/searchByContact", method = RequestMethod.GET)
 	public String byContact(ModelMap model, @RequestParam("contact") long contact) {
 		String forwardPage = "";
 		PersonDTO personDTO = this.personService.getPersonByContact(contact);
 		if (personDTO != null) {
-			if(PersonRequestValidator.isValidContact(contact)) {
+			if (PersonRequestValidator.isValidContact(contact)) {
 
-			forwardPage = "employeelist";
-			model.addAttribute("personDTOlist", personDTO);
+				forwardPage = "employee";
+				model.addAttribute("personDTO", personDTO);
 			}
 		} else {
 			System.out.println("User is not present.");
+		}
+		return forwardPage;
+	}
+
+	@RequestMapping(value = "/searchById", method = RequestMethod.GET)
+	public String byId(ModelMap model, @RequestParam("id") int id, @RequestParam("adminid") int adminid) {
+		String forwardPage = "";
+		PersonDTO personDTO = this.personService.getPersonById(id);
+		if (personDTO != null) {
+			if (PersonRequestValidator.isValidId(id)) {
+
+				forwardPage = "employee";
+				model.addAttribute("personDTO", personDTO);
+			}
+		} else {
+			model.addAttribute("error", "value is wrong please try again");
+			model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+			List<PersonDTO> listpersonDTO = this.personService.listPersonsWithoutAdmin(adminid);
+			model.addAttribute("listPersonDTO", listpersonDTO);
+			forwardPage = "adminEmployee2";
 		}
 		return forwardPage;
 	}
@@ -143,8 +165,6 @@ public class PersonController {
 		String forwardPage = "";
 		PersonDTO personDTO = this.personService.getByName(firstName);
 		if (personDTO != null) {
-			System.out.println("User is present.");
-			System.out.println(personDTO);
 			forwardPage = "employee";
 			model.addAttribute("personDTO", personDTO);
 		} else {
@@ -179,24 +199,22 @@ public class PersonController {
 				model.addAttribute("personDTO", dto);
 				model.addAttribute("listPersonDTO", list);
 				forward = "adminEmployee2";
-			} 
-			  else if(userDTO.getAdmin().equalsIgnoreCase("yes")) {		
-					int id = userDTO.getId();
-					PersonDTO dto = this.personService.getPersonById(id);
-					List<PersonDTO> list = this.personService.listPersonsWithoutAdmin(userDTO.getId());
-					model.addAttribute("personDTO", dto);
-					model.addAttribute("listPersonDTO", list);
-					model.addAttribute("error", "value is wrong please try again");
-					forward = "adminEmployee2";			
-				}
-				else {
+			} else if (userDTO.getAdmin().equalsIgnoreCase("yes")) {
+				int id = userDTO.getId();
+				PersonDTO dto = this.personService.getPersonById(id);
+				List<PersonDTO> list = this.personService.listPersonsWithoutAdmin(userDTO.getId());
+				model.addAttribute("personDTO", dto);
+				model.addAttribute("listPersonDTO", list);
+				model.addAttribute("error", "value is wrong please try again");
+				forward = "adminEmployee2";
+			} else {
 				int id = userDTO.getId();
 				PersonDTO dto = this.personService.getPersonById(id);
 				model.addAttribute("personDTO", dto);
 				forward = "editemployee";
 				model.addAttribute("error", "value is wrong please try again");
-				}
-			
+			}
+
 		} else {
 			model.addAttribute("error", "value is wrong please try again");
 
@@ -228,6 +246,7 @@ public class PersonController {
 		}
 		return forward;
 	}
+
 	@RequestMapping(value = "/addperson", method = RequestMethod.POST)
 	public String addPerson(ModelMap model, @ModelAttribute("userDTO") PersonDTO userDTO) {
 		String forward = "";
@@ -249,5 +268,47 @@ public class PersonController {
 			forward = "addperson";
 		}
 		return forward;
+	}
+
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String searchUser(@ModelAttribute("searchDTO") SearchDTO searchDTO, ModelMap model,
+			@RequestParam("adminId") int adminid) {
+
+		String forwardPage = "";
+		if (searchDTO != null) {
+			if (PersonRequestValidator.isValidSearchDTO(searchDTO)) {
+				if (searchDTO.getSearchCriteria().equalsIgnoreCase("Id")) {
+					int id = Integer.parseInt(searchDTO.getSearchText());
+					List<PersonDTO> personDTO = this.personService.listofPersons(id);
+					if (personDTO != null) {
+						model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+						model.addAttribute("listPersonDTO", this.personService.listofPersons(id));
+						forwardPage = "adminEmployee2";
+					} else {
+						model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+						model.addAttribute("error", "value is wrong please try again");
+						forwardPage = "adminEmployee2";
+					}
+				}
+
+				else if (searchDTO.getSearchCriteria().equalsIgnoreCase("name")) {
+					model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+					model.addAttribute("listPersonDTO", this.personService.getPersonByName(searchDTO.getSearchText()));
+					forwardPage = "adminEmployee2";
+				} else if (searchDTO.getSearchCriteria().equalsIgnoreCase("contact")) {
+					long contact = Long.parseLong(searchDTO.getSearchText());
+					model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+					model.addAttribute("listPersonDTO", this.personService.listofPersons(contact));
+					forwardPage = "adminEmployee2";
+				}
+			}
+		} else {
+			System.out.println("person is not here");
+			model.addAttribute("personDTO", this.personService.getPersonById(adminid));
+			model.addAttribute("error", "value is wrong please try again");
+			forwardPage = "adminEmployee2";
+		}
+
+		return forwardPage;
 	}
 }

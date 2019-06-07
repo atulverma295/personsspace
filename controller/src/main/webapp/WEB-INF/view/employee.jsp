@@ -13,6 +13,11 @@ table,th,td {
 </style>
 </head>
 <body>
+<div style="float: right">
+		<form:form method="GET" action="login">
+			<input type="submit" value="Logout">
+		</form:form>
+	</div>
 	<h1 style="color: red;">Detail of Employee</h1>
 	<table>
 		<tr>

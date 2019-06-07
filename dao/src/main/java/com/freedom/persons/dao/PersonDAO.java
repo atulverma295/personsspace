@@ -17,4 +17,6 @@ public interface PersonDAO {
 	public Person updatePersons(Person p);
 	public Person addPerson(Person p);
 	public List<Person> listPersonsWithoutAdmin(int id);
+	public List<Person> listofPersons(int id);
+	public List<Person> listofPersons(long contact);
 }

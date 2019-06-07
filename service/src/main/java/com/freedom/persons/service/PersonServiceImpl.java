@@ -43,16 +43,19 @@ public class PersonServiceImpl implements PersonService {
 
 	@Transactional
 	public PersonDTO getPersonById(int id) {
-		PersonDTO personDTO = new PersonDTO();
+		PersonDTO personDTO = null;
 		Person person = this.personDAO.getPersonById(id);
-		personDTO.setId(person.getId());
-		personDTO.setFirstName(person.getFirstName());
-		personDTO.setLastName(person.getLastName());
-		personDTO.setCountry(person.getCountry());
-		personDTO.setUsername(person.getUsername());
-		personDTO.setPassword(person.getPassword());
-		personDTO.setAdmin(person.getAdmin());
-		personDTO.setContact(person.getContact());
+		if(person!=null) {
+			personDTO = new PersonDTO();
+			personDTO.setId(person.getId());
+			personDTO.setFirstName(person.getFirstName());
+			personDTO.setLastName(person.getLastName());
+			personDTO.setCountry(person.getCountry());
+			personDTO.setUsername(person.getUsername());
+			personDTO.setPassword(person.getPassword());
+			personDTO.setAdmin(person.getAdmin());
+			personDTO.setContact(person.getContact());
+		}
 		return personDTO;
 
 	}
@@ -125,20 +128,22 @@ public class PersonServiceImpl implements PersonService {
 
 	@Transactional
 	public List<PersonDTO> getPersonByName(String firstName) {
-		List<PersonDTO> personDTO = new ArrayList<PersonDTO>();
+		List<PersonDTO> personDTO =new ArrayList<PersonDTO>();
 		List<Person> list = this.personDAO.getPersonByName(firstName);
-		for (int i = 0; i < list.size(); i++) {
-			Person p = list.get(i);
-			PersonDTO per = new PersonDTO();
-			per.setId(p.getId());
-			per.setFirstName(p.getFirstName());
-			per.setLastName(p.getLastName());
-			per.setCountry(p.getCountry());
-			per.setUsername(p.getUsername());
-			per.setPassword(p.getPassword());
-			per.setAdmin(p.getAdmin());
-			per.setContact(p.getContact());
-			personDTO.add(per);
+		if(list!=null) {
+			for (int i = 0; i < list.size(); i++) {
+				Person p = list.get(i);
+				PersonDTO per = new PersonDTO();
+				per.setId(p.getId());
+				per.setFirstName(p.getFirstName());
+				per.setLastName(p.getLastName());
+				per.setCountry(p.getCountry());
+				per.setUsername(p.getUsername());
+				per.setPassword(p.getPassword());
+				per.setAdmin(p.getAdmin());
+				per.setContact(p.getContact());
+				personDTO.add(per);
+		}
 		}
 		return personDTO;
 
@@ -214,5 +219,72 @@ public class PersonServiceImpl implements PersonService {
 		}
 		return personDTO;
 	}
+/*	@Transactional
+	public List<PersonDTO> listofPersons(int id) {
+		List<PersonDTO> personDTO = new ArrayList<PersonDTO>();
+		List<Person> list = this.personDAO.listofPersons(id);
+		for (int i = 0; i < list.size(); i++) {
+			Person p = list.get(i);
+
+			PersonDTO per = new PersonDTO();
+			per.setId(p.getId());
+			per.setFirstName(p.getFirstName());
+			per.setLastName(p.getLastName());
+			per.setCountry(p.getCountry());
+			per.setUsername(p.getUsername());
+			per.setPassword(p.getPassword());
+			per.setAdmin(p.getAdmin());
+			per.setContact(p.getContact());
+			personDTO.add(per);
+
+		}
+		return personDTO;
+	}*/
+	@Transactional
+	public List<PersonDTO> listofPersons(long contact) {
+		List<PersonDTO> personDTO = new ArrayList<PersonDTO>();
+		List<Person> list = this.personDAO.listofPersons(contact);
+		for (int i = 0; i < list.size(); i++) {
+			Person p = list.get(i);
+
+			PersonDTO per = new PersonDTO();
+			per.setId(p.getId());
+			per.setFirstName(p.getFirstName());
+			per.setLastName(p.getLastName());
+			per.setCountry(p.getCountry());
+			per.setUsername(p.getUsername());
+			per.setPassword(p.getPassword());
+			per.setAdmin(p.getAdmin());
+			per.setContact(p.getContact());
+			personDTO.add(per);
+
+		}
+		return personDTO;
+	}
+	@Transactional
+	public List<PersonDTO> listofPersons(int id) {
+		List<PersonDTO> personDTO = null;
+		List<Person> list = this.personDAO.listofPersons(id);
+		if(list!=null) {
+			for (int i = 0; i < list.size(); i++) {
+			Person p = list.get(i);
+
+			PersonDTO per = new PersonDTO();
+			per.setId(p.getId());
+			per.setFirstName(p.getFirstName());
+			per.setLastName(p.getLastName());
+			per.setCountry(p.getCountry());
+			per.setUsername(p.getUsername());
+			per.setPassword(p.getPassword());
+			per.setAdmin(p.getAdmin());
+			per.setContact(p.getContact());
+			personDTO=new ArrayList<PersonDTO>();
+			personDTO.add(per);
+
+		}
+			}
+		return personDTO;
+	}
+
 
 }
